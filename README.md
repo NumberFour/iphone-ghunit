@@ -1,3 +1,6 @@
+**This is a version of the GHUnit framework containing custom modifications made by NumberFour AG. The original source can be found at gabriel/gh-unit**
+***
+
 # GHUnit
 
 GHUnit is a test framework for Objective-C (Mac OS X 10.5 and above and iPhone 3.x and above).

@@ -86,6 +86,8 @@ BOOL isTestFixtureOfClass(Class aClass, Class testCaseClass) {
 
 @implementation GHTesting
 
+@synthesize additionalTests = additionalTests_;
+
 static GHTesting *gSharedInstance;
 
 + (GHTesting *)sharedInstance {
@@ -105,6 +107,12 @@ static GHTesting *gSharedInstance;
                             nil] retain];
   }
   return self;
+}
+
+- (void)dealloc {
+	[additionalTests_ release];
+	
+	[super dealloc];
 }
 
 - (BOOL)isTestCaseClass:(Class)aClass {

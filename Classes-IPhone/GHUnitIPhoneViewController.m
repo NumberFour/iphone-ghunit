@@ -50,12 +50,21 @@ NSString *const GHUnitFilterKey = @"Filter";
   return self;
 }
 
+- (id) initWithDataSource:(GHUnitIPhoneTableViewDataSource*) source {
+	if ((self = [self init])) {
+		dataSource_ = [source retain];
+		[dataSource_ loadDefaults];
+		self.title = [dataSource_.root name];
+	}
+	
+	return self;
+}
+
 - (void)dealloc {
   [dataSource_ release];  
   [suite_ release];
   [runButton_ release];
   view_.tableView.delegate = nil;
-  view_.searchBar.delegate = nil;
   [view_ release];
   [super dealloc];
 }
@@ -70,19 +79,19 @@ NSString *const GHUnitFilterKey = @"Filter";
   [super loadView];
 
   [runButton_ release];
-  runButton_ = [[UIBarButtonItem alloc] initWithTitle:@"Run" style:UIBarButtonItemStyleDone
-                                               target:self action:@selector(_toggleTestsRunning)];
+  runButton_ = nil;
+	
+  if (self.dataSource.topLevel) {
+	  runButton_ = [[UIBarButtonItem alloc] initWithTitle:@"Run" style:UIBarButtonItemStyleDone
+												   target:self action:@selector(_toggleTestsRunning)];
+  }
   self.navigationItem.rightBarButtonItem = runButton_;  
 
   // Clear view
   view_.tableView.delegate = nil;
-  view_.searchBar.delegate = nil;
   [view_ release];
   
   view_ = [[GHUnitIPhoneView alloc] initWithFrame:CGRectMake(0, 0, 320, 344)];
-  view_.searchBar.delegate = self;
-  NSString *prefix = [self _prefix];
-  if (prefix) view_.searchBar.text = prefix;  
   view_.filterControl.selectedSegmentIndex = [self _filterIndex];
   [view_.filterControl addTarget:self action:@selector(_filterChanged:) forControlEvents:UIControlEventValueChanged];
   view_.tableView.delegate = self;
@@ -200,13 +209,23 @@ NSString *const GHUnitFilterKey = @"Filter";
     [view_.tableView reloadData];
   } else {    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    GHTestNode *sectionNode = [[[dataSource_ root] children] objectAtIndex:indexPath.section];
-    GHTestNode *testNode = [[sectionNode children] objectAtIndex:indexPath.row];
-    
-    GHUnitIPhoneTestViewController *testViewController = [[GHUnitIPhoneTestViewController alloc] init]; 
-    [testViewController setTest:testNode.test];
-    [self.navigationController pushViewController:testViewController animated:YES];
-    [testViewController release];
+	
+	if ([node.children count] > 0) {
+	  GHUnitIPhoneTableViewDataSource* source = [[GHUnitIPhoneTableViewDataSource alloc] initWithIdentifier:[node name] suite:[dataSource_ suite]];
+	  source.root = node;
+	  source.topLevel = NO;
+		  
+	  GHUnitIPhoneViewController *viewController = [[GHUnitIPhoneViewController alloc] initWithDataSource:source];		
+	  [viewController loadDefaults];
+	  [self.navigationController pushViewController:viewController animated:YES];
+	  [viewController release];
+	}
+	else {
+	  GHUnitIPhoneTestViewController *testViewController = [[GHUnitIPhoneTestViewController alloc] init];	
+	  [testViewController setTest:node.test];
+	  [self.navigationController pushViewController:testViewController animated:YES];
+	  [testViewController release];
+	}
   }
 }
 

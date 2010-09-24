@@ -33,14 +33,15 @@
 
 @implementation GHTestViewModel
 
-@synthesize root=root_, editing=editing_;
+@synthesize root=root_, suite=suite_, editing=editing_, topLevel=topLevel_;
 
 - (id)initWithIdentifier:(NSString *)identifier suite:(GHTestSuite *)suite {
 	if ((self = [super init])) {		
     identifier_ = [identifier retain];
 		suite_ = [suite retain];				
 		root_ = [[GHTestNode alloc] initWithTest:suite_ children:[suite_ children] source:self];
-		map_ = [[NSMutableDictionary dictionary] retain];		
+		map_ = [[NSMutableDictionary dictionary] retain];	
+		topLevel_ = YES;
 	}
 	return self;
 }

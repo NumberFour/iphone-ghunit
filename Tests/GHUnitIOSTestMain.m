@@ -38,6 +38,7 @@
 //#import <GHUnitIOS/GHUnitIOS.h>
 // If you are using the static library and importing header files manually
 #import "GHUnitIOS.h"
+#import "GHIPhoneUIChanges.h"
 
 // Default exception handler
 void exceptionHandler(NSException *exception) { 
@@ -72,7 +73,8 @@ int main(int argc, char *argv[]) {
   NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
   
   // Register any special test case classes
-  //[[GHTesting sharedInstance] registerClassName:@"GHSpecialTestCase"];  
+  //[[GHTesting sharedInstance] registerClassName:@"GHSpecialTestCase"];
+  [GHTesting sharedInstance].additionalTests = [GHIPhoneUIChanges testGroup];
   
   int retVal = 0;
   // If GHUNIT_CLI is set we are using the command line interface and run the tests

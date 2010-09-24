@@ -61,10 +61,11 @@ BOOL isTestFixtureOfClass(Class aClass, Class testCaseClass);
  @note Much of this is borrowed from GTM/UnitTesting.
  */
 @interface GHTesting : NSObject { 
-
   NSMutableArray/* of NSString*/ *testCaseClassNames_;
-  
+  GHTestGroup* additionalTests_;
 }
+
+@property (nonatomic, retain) GHTestGroup* additionalTests;
 
 /*!
  The shared testing instance.

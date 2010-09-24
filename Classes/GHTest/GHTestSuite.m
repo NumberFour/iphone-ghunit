@@ -48,6 +48,12 @@ NSString *GHUnitTest = NULL;
 + (GHTestSuite *)allTests {
   NSArray *testCases = [[GHTesting sharedInstance] loadAllTestCases];
   GHTestSuite *allTests = [[self alloc] initWithName:@"Tests" testCases:nil delegate:nil];  
+  GHTestGroup* additionalTests = [GHTesting sharedInstance].additionalTests;
+	
+  if (additionalTests != nil) {
+    [allTests addTestGroup:additionalTests];
+  }
+
   for(id testCase in testCases) {
     [allTests addTestCase:testCase];
   }

@@ -1,3 +1,7 @@
+# Custom modifications
+- Allow iPhone UI to handle stacked test groups
+- Remove search bar
+
 # Release 0.4.26
 - Fixing LLVM/clang warnings (Whitney Young, nolanw)
 - GHAssertNotEqualStrings will allow for nils (Rusty Zarse)

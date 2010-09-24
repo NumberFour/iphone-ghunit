@@ -49,6 +49,8 @@
 
 @property (retain, nonatomic) GHTestSuite *suite;
 
+- (id) initWithDataSource:(GHUnitIPhoneTableViewDataSource*) source;
+
 - (void)reloadTest:(id<GHTest>)test;
 
 - (void)scrollToTest:(id<GHTest>)test;

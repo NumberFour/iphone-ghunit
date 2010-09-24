@@ -56,10 +56,14 @@ typedef enum {
 	BOOL editing_;
 
 	NSMutableDictionary *defaults_;
+
+	BOOL topLevel_;
 }
 
-@property (readonly, nonatomic) GHTestNode *root;
+@property (retain, nonatomic) GHTestNode *root;
+@property (retain, nonatomic) GHTestSuite *suite;
 @property (assign, nonatomic, getter=isEditing) BOOL editing;
+@property (assign, nonatomic, getter=isTopLevel) BOOL topLevel;
 
 /*!
  Create view model with root test group node.

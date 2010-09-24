@@ -29,8 +29,6 @@
 
 
 @interface GHUnitIPhoneView : UIView {
-  UISearchBar *searchBar_;
-  
   UITableView *tableView_;
   
   //! Status label at bottom of the view
@@ -41,12 +39,14 @@
   UIToolbar *runToolbar_;  
   
   UIView *footerView_;
+	
+  BOOL topLevel_;
 }
 
 @property (readonly, nonatomic) UILabel *statusLabel;
 @property (readonly, nonatomic) UISegmentedControl *filterControl;
-@property (readonly, nonatomic) UISearchBar *searchBar;
 @property (readonly, nonatomic) UITableView *tableView;
+@property (nonatomic, assign) BOOL topLevel;
 
 
 @end
