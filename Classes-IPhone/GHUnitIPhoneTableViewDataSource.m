@@ -32,7 +32,7 @@
 @implementation GHUnitIPhoneTableViewDataSource
 
 - (GHTestNode *)nodeForIndexPath:(NSIndexPath *)indexPath {
-  GHTestNode *sectionNode = [[[self root] children] objectAtIndex:indexPath.section];
+  GHTestNode *sectionNode = self.topLevel ? [[[self root] children] objectAtIndex:indexPath.section] : self.root;
   return [[sectionNode children] objectAtIndex:indexPath.row];
 }
 
@@ -57,6 +57,10 @@
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+  if (!self.topLevel) {
+    return [self root].name;
+  }
+	
   NSArray *children = [[self root] children];
   if ([children count] == 0) return nil;
   GHTestNode *sectionNode = [children objectAtIndex:section];
@@ -64,7 +68,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-  GHTestNode *sectionNode = [[[self root] children] objectAtIndex:indexPath.section];
+  GHTestNode *sectionNode = self.topLevel ? [[[self root] children] objectAtIndex:indexPath.section] : self.root;
   GHTestNode *node = [[sectionNode children] objectAtIndex:indexPath.row];
   
   static NSString *CellIdentifier = @"ReviewFeedViewItem";  

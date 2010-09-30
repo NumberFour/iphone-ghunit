@@ -97,10 +97,13 @@
 }
 
 - (NSInteger)numberOfGroups {
-	return [[root_ children] count];
+	return topLevel_ ? [[root_ children] count] : 1;
 }
 
 - (NSInteger)numberOfTestsInGroup:(NSInteger)group {
+	if (!topLevel_) {
+		return [[root_ children] count];
+	}
 	NSArray *children = [root_ children];
 	if ([children count] == 0) return 0;
 	GHTestNode *groupNode = [children objectAtIndex:group];
