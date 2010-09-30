@@ -92,6 +92,7 @@ extern NSString *NSStringFromGHTestStats(GHTestStats stats);
 
 @property (readonly, nonatomic) NSString *identifier;  // Unique identifier for test
 @property (readonly, nonatomic) NSString *name;
+@property (readonly, nonatomic) NSString *className;
 @property (assign, nonatomic) NSTimeInterval interval;
 @property (assign, nonatomic) GHTestStatus status;
 @property (readonly, nonatomic) GHTestStats stats;
@@ -142,6 +143,7 @@ extern NSString *NSStringFromGHTestStats(GHTestStats stats);
   
   NSString *identifier_;
   NSString *name_;  
+  NSString *className_;  
   GHTestStatus status_;
   NSTimeInterval interval_;
   BOOL disabled_;

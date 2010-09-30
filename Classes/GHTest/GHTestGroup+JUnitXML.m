@@ -39,7 +39,21 @@
                          [NSString stringWithFormat:@"%@.xml", self.name]];
     
     // Attempt to write the XML and return the success status
-    return [[self JUnitXML] writeToFile:XMLPath atomically:NO encoding:NSUTF8StringEncoding error:error];
+    BOOL ok = [[self JUnitXML] writeToFile:XMLPath atomically:NO encoding:NSUTF8StringEncoding error:error];
+
+	if (ok) {
+		for (id child in self.children) {
+			if ([child isKindOfClass:[GHTestGroup class]]) {
+				ok = [child writeJUnitXMLAtPath:path error:error];
+				
+				if (!ok) {
+					return NO;
+				}
+			}
+		}
+	}
+	  
+    return ok;
   }
   return YES;
 }
@@ -50,8 +64,10 @@
                                self.name, self.stats.testCount, self.stats.failureCount, self.interval];
   
   for (id child in self.children) {
-    if ([child respondsToSelector:@selector(JUnitXML)])
-      [JUnitXML appendString:[child JUnitXML]];
+    if ([child isKindOfClass:[GHTest class]]) {
+		if ([child respondsToSelector:@selector(JUnitXML)])
+			[JUnitXML appendString:[child JUnitXML]];
+	}
   }
   [JUnitXML appendString:@"</testsuite>"];
   return JUnitXML;

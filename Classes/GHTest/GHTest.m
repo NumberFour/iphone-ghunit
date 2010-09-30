@@ -78,12 +78,14 @@ BOOL GHTestStatusEnded(GHTestStatus status) {
 @implementation GHTest
 
 @synthesize delegate=delegate_, target=target_, selector=selector_, name=name_, interval=interval_, 
-exception=exception_, status=status_, log=log_, identifier=identifier_, disabled=disabled_, hidden=hidden_;
+exception=exception_, status=status_, log=log_, identifier=identifier_, disabled=disabled_, hidden=hidden_,
+className=className_;
 
 - (id)initWithIdentifier:(NSString *)identifier name:(NSString *)name {
   if ((self = [self init])) {
     identifier_ = [identifier retain];
     name_ = [name retain];
+    className_ = [identifier retain];
     interval_ = -1;
     status_ = GHTestStatusNone;
   }
@@ -96,6 +98,7 @@ exception=exception_, status=status_, log=log_, identifier=identifier_, disabled
   if ((self = [self initWithIdentifier:identifier name:name])) {
     target_ = [target retain];
     selector_ = selector;
+	className_ = [NSStringFromClass([target class]) retain];
   }
   return self;  
 }
