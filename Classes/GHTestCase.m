@@ -33,7 +33,7 @@
 
 @implementation GHTestCase
 
-@synthesize logWriter=logWriter_, currentSelector=currentSelector_;
+@synthesize logWriter=logWriter_, currentSelector=currentSelector_, test=test_;
 
 - (void)failWithException:(NSException *)exception {
   [exception raise];

@@ -140,6 +140,7 @@
 		006D788C120A98C60053B72E /* GHUnitIPhoneTestViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 00080FE30F4FC9260034DF4C /* GHUnitIPhoneTestViewController.h */; };
 		006D788D120A98C80053B72E /* GHUnitIPhoneView.h in Headers */ = {isa = PBXBuildFile; fileRef = 008F39E11174300C001A35C4 /* GHUnitIPhoneView.h */; };
 		006D788E120A98C80053B72E /* GHUnitIPhoneViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 002D9C650F4915C2007932FE /* GHUnitIPhoneViewController.h */; };
+		BB3DB507125B78980034252F /* GHTestSkip.m in Sources */ = {isa = PBXBuildFile; fileRef = BB3DB506125B78980034252F /* GHTestSkip.m */; };
 		BBCCDB64124CEF4C001BD3C0 /* GHIPhoneUIChanges.m in Sources */ = {isa = PBXBuildFile; fileRef = BBCCDB63124CEF4C001BD3C0 /* GHIPhoneUIChanges.m */; };
 		BBCCDB65124CEF4C001BD3C0 /* GHIPhoneUIChanges.m in Sources */ = {isa = PBXBuildFile; fileRef = BBCCDB63124CEF4C001BD3C0 /* GHIPhoneUIChanges.m */; };
 		BBCCDB8B124CF387001BD3C0 /* GHIPhoneUIChanges.h in Headers */ = {isa = PBXBuildFile; fileRef = BBCCDB8A124CF387001BD3C0 /* GHIPhoneUIChanges.h */; };
@@ -315,6 +316,7 @@
 		00F09A65108D5040000E5AB5 /* GHTestEmpty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GHTestEmpty.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* Tests_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tests_Prefix.pch; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BB3DB506125B78980034252F /* GHTestSkip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GHTestSkip.m; sourceTree = "<group>"; };
 		BBCCDB63124CEF4C001BD3C0 /* GHIPhoneUIChanges.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GHIPhoneUIChanges.m; sourceTree = "<group>"; };
 		BBCCDB8A124CF387001BD3C0 /* GHIPhoneUIChanges.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GHIPhoneUIChanges.h; sourceTree = "<group>"; };
 		D9A2E33A11A6132C00F7FA51 /* Framework.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Framework.plist; sourceTree = "<group>"; };
@@ -542,6 +544,7 @@
 		00AF12E70F2D880E009F0ABA /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				BB3DB506125B78980034252F /* GHTestSkip.m */,
 				004810C5122E257500E3B69F /* GHUnitIOSTestMain.m */,
 				00DCB8780FA4F9E10022DA5A /* IPhone */,
 				000203F40F8EA86000EC31BA /* Data */,
@@ -884,6 +887,7 @@
 				0051316311C6EDB400A46E09 /* GHUNSObject+Swizzle.m in Sources */,
 				00480FFC122E1C3800E3B69F /* GHTestMacros.m in Sources */,
 				004810C6122E257500E3B69F /* GHUnitIOSTestMain.m in Sources */,
+				BB3DB507125B78980034252F /* GHTestSkip.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -940,7 +944,7 @@
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
-				SDKROOT = iphoneos3.0;
+				SDKROOT = iphonesimulator3.2;
 			};
 			name = Debug;
 		};
@@ -949,7 +953,7 @@
 			baseConfigurationReference = 0002880E11814C8300D74BBD /* iPhoneTests.xcconfig */;
 			buildSettings = {
 				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
-				SDKROOT = iphoneos4.1;
+				SDKROOT = iphonesimulator3.2;
 			};
 			name = Release;
 		};

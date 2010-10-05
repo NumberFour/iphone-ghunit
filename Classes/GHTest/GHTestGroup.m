@@ -43,7 +43,7 @@
 @implementation GHTestGroup
 
 @synthesize stats=stats_, parent=parent_, children=children_, delegate=delegate_, interval=interval_, 
-status=status_, testCase=testCase_, exception=exception_, options=options_;
+status=status_, testCase=testCase_, exception=exception_, options=options_, className=className_;
 
 - (id)initWithName:(NSString *)name delegate:(id<GHTestDelegate>)delegate {
   if ((self = [super init])) {
@@ -78,6 +78,7 @@ status=status_, testCase=testCase_, exception=exception_, options=options_;
   for(id<GHTest> test in children_)
     [test setDelegate:nil];
   [name_ release];
+  [className_ release];
   [children_ release];
   [testCase_ release];
   [super dealloc];
@@ -143,7 +144,7 @@ status=status_, testCase=testCase_, exception=exception_, options=options_;
 
 - (void)_reset {
   status_ = GHTestStatusNone;
-  stats_ = GHTestStatsMake(0, 0, 0, stats_.testCount);
+  stats_ = GHTestStatsMake(0, 0, 0, 0, stats_.testCount);
   interval_ = 0;
   [exception_ release];
   exception_ = nil; 
@@ -182,6 +183,19 @@ status=status_, testCase=testCase_, exception=exception_, options=options_;
     status_ = GHTestStatusCancelled;
   }
   [delegate_ testDidUpdate:self source:self];
+}
+
+- (void)skip {
+	if (status_ == GHTestStatusRunning) {
+		status_ = GHTestStatusSkipping;
+	} else {
+		for(id<GHTest> test in children_) {
+			stats_.skipCount++;
+			[test skip];
+		}
+		status_ = GHTestStatusSkipped;
+	}
+	[delegate_ testDidUpdate:self source:self];
 }
 
 - (void)setDisabled:(BOOL)disabled {
@@ -276,7 +290,10 @@ status=status_, testCase=testCase_, exception=exception_, options=options_;
     if (status_ == GHTestStatusCancelling) {
       stats_.cancelCount++;
       [test cancel];
-    } else if (status_ == GHTestStatusErrored) {
+	} else if (status_ == GHTestStatusSkipping) {
+      stats_.skipCount++;
+	  [test skip];
+	} else if (status_ == GHTestStatusErrored) {
       stats_.failureCount++;
       [test setException:exception_];
     } else {        
@@ -352,6 +369,7 @@ status=status_, testCase=testCase_, exception=exception_, options=options_;
     stats_.failureCount += [test stats].failureCount;
     stats_.succeedCount += [test stats].succeedCount;
     stats_.cancelCount += [test stats].cancelCount;   
+    stats_.skipCount += [test stats].skipCount;   
   }
   [delegate_ testDidEnd:self source:source];
   [delegate_ testDidUpdate:self source:self]; 

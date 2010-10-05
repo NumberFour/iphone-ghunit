@@ -978,6 +978,10 @@ continue; \
 }\
 } while (0)
 
+/*" Skips a test
+ "*/
+#define GHSkip() [self.test skip]
+
 
 @interface NSException (GHTestMacros_GTMSenTestAdditions)
 + (NSException *)ghu_failureInFile:(NSString *)filename 

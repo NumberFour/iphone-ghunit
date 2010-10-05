@@ -33,11 +33,28 @@
 @implementation GHTest (JUnitXML)
 
 - (NSString *)JUnitXML {
-  return [NSString stringWithFormat:
-          @"<testcase name=\"%@\" classname=\"%@\" time=\"%0.4f\">%@</testcase>",
-          self.name, self.className, self.interval,
-          (self.exception ? [NSString stringWithFormat:@"<failure message=\"%@\">%@</failure>", [self.exception description], 
-                             [GHTesting descriptionForException:self.exception]] : @"")];
+	NSString* skipped = nil;
+	NSString* failure = nil;
+	
+	if (self.exception) {
+		failure = [NSString stringWithFormat:@"<failure message=\"%@\">%@</failure>",
+				   [self.exception description], 
+				   [GHTesting descriptionForException:self.exception]
+				   ];
+	}
+	
+	if (self.status == GHTestStatusSkipped) {
+		skipped = @"<skipped/>";
+	}
+	
+	return [NSString stringWithFormat:
+			@"<testcase name=\"%@\" classname=\"%@\" time=\"%0.4f\">%@</testcase>",
+			self.name,
+			self.className,
+			self.interval,
+			skipped,
+			failure
+			];
 }
 
 @end

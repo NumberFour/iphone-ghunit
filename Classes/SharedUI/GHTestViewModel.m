@@ -336,7 +336,12 @@
 		else if ([test_ status] == GHTestStatusCancelled) {
 			status = @"-";
 			interval = @"";
-		} else if ([test_ isDisabled] || [test_ isHidden]) {
+		}
+		else if ([test_ status] == GHTestStatusSkipped) {
+			status = @"✂";
+			interval = @"";
+		}
+		else if ([test_ isDisabled] || [test_ isHidden]) {
 			status = @"⊝";
 			interval = @"";
 		}

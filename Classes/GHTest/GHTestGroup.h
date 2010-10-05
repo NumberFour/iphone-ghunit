@@ -81,6 +81,7 @@
   id testCase_; 
   
   NSException *exception_; // If exception happens in group setUpClass/tearDownClass
+  NSString* className_;  
 }
 
 @property (readonly, nonatomic) NSArray */*of id<GHTest>*/children;

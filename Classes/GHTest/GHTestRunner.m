@@ -194,7 +194,7 @@ operationQueue=operationQueue_;
   if ([source status] != GHTestStatusCancelled) {
     if (![source conformsToProtocol:@protocol(GHTestGroup)]) {      
       NSString *message = [NSString stringWithFormat:@"%@ (%0.3fs)\n", 
-                           ([source stats].failureCount > 0 ? @"FAIL" : @"OK"), [source interval]]; 
+                           ([source stats].failureCount > 0 ? @"FAIL" : ([source stats].skipCount > 0 ? @"SKIPPED" : @"OK")), [source interval]]; 
       [self log:message];
     }
     
@@ -242,13 +242,15 @@ operationQueue=operationQueue_;
 
 - (void)_notifyFinished {
   NSString *message = [NSString stringWithFormat:@"Test Suite '%@' finished.\n"
-                       "Executed %d of %d tests, with %d failures in %0.3f seconds (%d disabled).\n",
+                       "Executed %d of %d tests, with %d failures in %0.3f seconds (%d disabled, %d skipped).\n",
                        [test_ name], 
                        ([test_ stats].succeedCount + [test_ stats].failureCount), 
                        [test_ stats].testCount,
                        [test_ stats].failureCount, 
                        [test_ interval],
-                       [test_ disabledCount]];
+                       [test_ disabledCount],
+                       [test_ stats].skipCount
+					   ];
   [self log:message];
   
   if ([test_ isKindOfClass:[GHTestGroup class]]) {

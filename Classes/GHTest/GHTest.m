@@ -44,25 +44,28 @@ NSString* NSStringFromGHTestStatus(GHTestStatus status) {
     case GHTestStatusSucceeded: return NSLocalizedString(@"Succeeded", nil); 
     case GHTestStatusErrored: return NSLocalizedString(@"Errored", nil);
     case GHTestStatusCancelled: return NSLocalizedString(@"Cancelled", nil);
+    case GHTestStatusSkipped: return NSLocalizedString(@"Skipped", nil);
+    case GHTestStatusSkipping: return NSLocalizedString(@"Skipping", nil);
       
     default: return NSLocalizedString(@"Unknown", nil);
   }
 }
 
-GHTestStats GHTestStatsMake(NSInteger succeedCount, NSInteger failureCount, NSInteger cancelCount, NSInteger testCount) {
+GHTestStats GHTestStatsMake(NSInteger succeedCount, NSInteger failureCount, NSInteger cancelCount, NSInteger skipCount, NSInteger testCount) {
   GHTestStats stats;
   stats.succeedCount = succeedCount;
   stats.failureCount = failureCount; 
   stats.cancelCount = cancelCount;  
+  stats.skipCount = skipCount;
   stats.testCount = testCount;
   return stats;
 }
 
-const GHTestStats GHTestStatsEmpty = {0, 0, 0, 0};
+const GHTestStats GHTestStatsEmpty = {0, 0, 0, 0, 0};
 
 NSString *NSStringFromGHTestStats(GHTestStats stats) {
-  return [NSString stringWithFormat:@"%d/%d/%d/%d", stats.succeedCount, stats.failureCount, 
-          stats.cancelCount, stats.testCount]; 
+  return [NSString stringWithFormat:@"%d/%d/%d/%d/%d", stats.succeedCount, stats.failureCount, 
+          stats.cancelCount, stats.skipCount, stats.testCount]; 
 }
 
 BOOL GHTestStatusIsRunning(GHTestStatus status) {
@@ -72,6 +75,7 @@ BOOL GHTestStatusIsRunning(GHTestStatus status) {
 BOOL GHTestStatusEnded(GHTestStatus status) {
   return (status == GHTestStatusSucceeded 
           || status == GHTestStatusErrored
+          || status == GHTestStatusSkipped
           || status == GHTestStatusCancelled);
 }
 
@@ -128,11 +132,12 @@ className=className_;
 
 - (GHTestStats)stats {
   switch(status_) {
-    case GHTestStatusSucceeded: return GHTestStatsMake(1, 0, 0, 1);
-    case GHTestStatusErrored: return GHTestStatsMake(0, 1, 0, 1);
-    case GHTestStatusCancelled: return GHTestStatsMake(0, 0, 1, 1);
+    case GHTestStatusSucceeded: return GHTestStatsMake(1, 0, 0, 0, 1);
+    case GHTestStatusErrored: return GHTestStatsMake(0, 1, 0, 0, 1);
+    case GHTestStatusCancelled: return GHTestStatsMake(0, 0, 1, 0, 1);
+    case GHTestStatusSkipped: return GHTestStatsMake(0, 0, 0, 1, 1);
     default:
-      return GHTestStatsMake(0, 0, 0, 1);
+      return GHTestStatsMake(0, 0, 0, 0, 1);
   }
 }
 
@@ -152,6 +157,17 @@ className=className_;
     status_ = GHTestStatusCancelled;
   }
   [delegate_ testDidUpdate:self source:self];
+}
+
+- (void) skip {
+	if (status_ == GHTestStatusRunning) {
+		status_ = GHTestStatusSkipping;
+	}
+	else {
+		status_ = GHTestStatusSkipped;
+	}
+
+	[delegate_ testDidUpdate:self source:self];
 }
 
 - (void)setDisabled:(BOOL)disabled {
@@ -213,6 +229,10 @@ className=className_;
   [delegate_ testDidStart:self source:self];
   
   [self _setLogWriter:self];
+	
+  if ([target_ isKindOfClass:[GHTestCase class]]) {
+	  ((GHTestCase*) target_).test = self;
+  }
 
   BOOL reraiseExceptions = ((options & GHTestOptionReraiseExceptions) == GHTestOptionReraiseExceptions);
   [GHTesting runTestWithTarget:target_ selector:selector_ exception:&exception_ interval:&interval_ reraiseExceptions:reraiseExceptions];
@@ -225,6 +245,8 @@ className=className_;
 
   if (status_== GHTestStatusCancelling) {
     status_ = GHTestStatusCancelled;
+  } else if (status_ == GHTestStatusSkipping) {
+	  status_ = GHTestStatusSkipped;
   } else if (status_ == GHTestStatusRunning) {
     status_ = GHTestStatusSucceeded;
   }

@@ -35,6 +35,8 @@ typedef enum {
   GHTestStatusRunning, // Test is running
   GHTestStatusCancelling, // Test is being cancelled
   GHTestStatusCancelled, // Test was cancelled
+  GHTestStatusSkipping, // Test is being skipped
+  GHTestStatusSkipped, // Test was skipped
   GHTestStatusSucceeded, // Test finished and succeeded
   GHTestStatusErrored, // Test finished and errored
 } GHTestStatus;
@@ -68,13 +70,14 @@ typedef struct {
   NSInteger succeedCount; // Number of succeeded tests
   NSInteger failureCount; // Number of failed tests
   NSInteger cancelCount; // Number of aborted tests
+  NSInteger skipCount; // NUmber of skipped tests
   NSInteger testCount; // Total number of tests 
 } GHTestStats;
 
 /*!
  Create GHTestStats.
  */
-extern GHTestStats GHTestStatsMake(NSInteger succeedCount, NSInteger failureCount, NSInteger cancelCount, NSInteger testCount);
+extern GHTestStats GHTestStatsMake(NSInteger succeedCount, NSInteger failureCount, NSInteger cancelCount, NSInteger skipCount, NSInteger testCount);
 
 extern const GHTestStats GHTestStatsEmpty;
 
@@ -105,6 +108,7 @@ extern NSString *NSStringFromGHTestStats(GHTestStats stats);
 
 - (void)reset;
 - (void)cancel;
+- (void)skip;
 
 - (NSInteger)disabledCount;
 

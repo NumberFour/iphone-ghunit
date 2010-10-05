@@ -14,7 +14,6 @@
 	GHTestGroup* group = [[[GHTestGroup alloc] initWithName:@"TestGroup" delegate:nil] autorelease];
 
 	GHTestGroup* subGroup = [[[GHTestGroup alloc] initWithName:@"SubGroup" delegate:nil] autorelease];
-	[group addTestGroup:subGroup];
 
 	Class class1 = objc_getClass("GHTestFail");
 	id testCase1 = [[[class1 alloc] init] autorelease];
@@ -30,7 +29,9 @@
 	id testCase3 = [[[class3 alloc] init] autorelease];
 	GHTestGroup* test3 = [[GHTestGroup alloc] initWithTestCase:testCase3 delegate:nil];
 	[subGroup addTestGroup:test3];
-	
+
+	[group addTestGroup:subGroup];
+
 	return group;
 }
 

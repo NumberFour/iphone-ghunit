@@ -91,6 +91,7 @@
  */
 @interface GHTestCase : NSObject {
   id<GHTestCaseLogWriter> logWriter_; // weak
+  id<GHTest> test_; // weak
   
   SEL currentSelector_;
 }
@@ -98,6 +99,7 @@
 //! The current test selector
 @property (assign, nonatomic) SEL currentSelector; 
 @property (assign, nonatomic) id<GHTestCaseLogWriter> logWriter;
+@property (assign, nonatomic) id<GHTest> test;
 
 // GTM_BEGIN
 //! Run before each test method
