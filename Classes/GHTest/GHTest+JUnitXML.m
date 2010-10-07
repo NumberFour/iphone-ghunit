@@ -33,8 +33,8 @@
 @implementation GHTest (JUnitXML)
 
 - (NSString *)JUnitXML {
-	NSString* skipped = nil;
-	NSString* failure = nil;
+	NSString* skipped = @"";
+	NSString* failure = @"";
 	
 	if (self.exception) {
 		failure = [NSString stringWithFormat:@"<failure message=\"%@\">%@</failure>",
@@ -48,7 +48,7 @@
 	}
 	
 	return [NSString stringWithFormat:
-			@"<testcase name=\"%@\" classname=\"%@\" time=\"%0.4f\">%@</testcase>",
+			@"<testcase name=\"%@\" classname=\"%@\" time=\"%0.4f\">%@%@</testcase>",
 			self.name,
 			self.className,
 			self.interval,
